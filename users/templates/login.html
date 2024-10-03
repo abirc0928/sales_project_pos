@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css">
+</head>
+<body>
+    <h1>Login From</h1>
+   
+    <form method="post">
+        {% csrf_token %}
+        {% comment %} {{form.as_p}} {% endcomment %}
+        {{form.non_field_error}}
+        <div class="form_group">
+            {{form.username.label_tag}}
+            {{form.username}}
+            {{form.username.error}}
+        </div>
+        <div class="form_group" style="margin: 20px 0px;">
+            {{form.password.label_tag}}
+            {{form.password}}
+            {{form.password.error}}
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    <div>
+        <a href="{% url 'password_reset' %}">Forgot password?</a>
+    </div>
+</body>
+</html>
