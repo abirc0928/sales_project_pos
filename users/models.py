@@ -18,3 +18,34 @@ class UserOTP(models.Model):
     
     def __str__(self):
         return f"OTP for user {self.user.username}"
+    
+class Customer(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+
+class Category(models.Model):
+    title = models.CharField(max_length=100)
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.FloatField()
+    unit = models.CharField(max_length=10)
+    image = models.ImageField(upload_to='products/')
+
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+class Invoice(models.Model):
+    total = models.FloatField()
+    vat =  models.FloatField()
+    discount = models.FloatField()
+    payable = models.FloatField()
+
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+
+class Order(models.Model):
+    quantity = models.IntegerField()
+    total = models.FloatField()
+    
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
