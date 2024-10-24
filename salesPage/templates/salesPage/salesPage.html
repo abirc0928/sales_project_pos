@@ -1,0 +1,198 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}Category {% endblock  %}
+{% block content %}
+<div id="contentRef" class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 col-lg-4 p-2">
+                <div class="shadow-sm h-100 bg-white rounded-3 p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <span class="text-bold text-dark">BILLED TO </span>
+                            <p class="text-xs mx-0 my-1">Name: <span id="CName">IRS IT</span> </p>
+                            <p class="text-xs mx-0 my-1">Email: <span id="CEmail">sdsd@sd.com</span></p>
+                            <p class="text-xs mx-0 my-1">User ID: <span id="CId">1</span> </p>
+                        </div>
+                        <div class="col-4">
+                            <img class="w-50" src="images/logo.png">
+                            <p class="text-bold mx-0 my-1 text-dark">Invoice </p>
+                            <p class="text-xs mx-0 my-1">Date: 2024-08-20 </p>
+                        </div>
+                    </div>
+                    <hr class="mx-0 my-2 p-0 bg-secondary">
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table w-100" id="invoiceTable">
+                                <thead class="w-100">
+                                    <tr class="text-xs">
+                                        <td>Name</td>
+                                        <td>Qty</td>
+                                        <td>Total</td>
+                                        <td>Remove</td>
+                                    </tr>
+                                </thead>
+                                <tbody class="w-100" id="invoiceList">
+                                    <tr class="text-xs">
+                                        <td>sd</td>
+                                        <td>4</td>
+                                        <td>208.00</td>
+                                        <td><a data-index="0"
+                                                class="btn remove text-xxs px-2 py-1  btn-sm m-0">Remove</a></td>
+                                    </tr>
+                                    <tr class="text-xs">
+                                        <td>sd</td>
+                                        <td>4</td>
+                                        <td>208.00</td>
+                                        <td><a data-index="1"
+                                                class="btn remove text-xxs px-2 py-1  btn-sm m-0">Remove</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <hr class="mx-0 my-2 p-0 bg-secondary">
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="text-bold text-xs my-1 text-dark"> TOTAL: <i
+                                    class="bi bi-currency-dollar"></i> <span id="total">416</span></p>
+                            <p class="text-bold text-xs my-2 text-dark"> PAYABLE: <i
+                                    class="bi bi-currency-dollar"></i> <span id="payable">436.80</span></p>
+                            <p class="text-bold text-xs my-1 text-dark"> VAT(5%): <i
+                                    class="bi bi-currency-dollar"></i> <span id="vat">20.80</span></p>
+                            <p class="text-bold text-xs my-1 text-dark"> Discount: <i
+                                    class="bi bi-currency-dollar"></i> <span id="discount">0</span></p>
+                            <span class="text-xxs">Discount(%):</span>
+                            <input onkeydown="return false" value="0" min="0" type="number" step="0.25"
+                                onchange="DiscountChange()" class="form-control w-40 " id="discountP">
+                            <p>
+                                <button onclick="createInvoice()"
+                                    class="btn  my-3 bg-gradient-primary w-40">Confirm</button>
+                            </p>
+                        </div>
+                        <div class="col-12 p-2">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-lg-4 p-2">
+                <div class="shadow-sm h-100 bg-white rounded-3 p-3">
+                    <div id="productTable_wrapper" class="dataTables_wrapper no-footer">
+                        <div id="productTable_filter" class="dataTables_filter"><label>Search:<input type="search"
+                                    class="" placeholder="" aria-controls="productTable"></label></div>
+                        <table class="table w-100 no-footer dataTable" id="productTable"
+                            aria-describedby="productTable_info" style="width: 505px;">
+                            <thead class="w-100">
+                                <tr class="text-xs text-bold">
+                                    <td class="sorting sorting_desc" tabindex="0" aria-controls="productTable"
+                                        rowspan="1" colspan="1"
+                                        aria-label="Product: activate to sort column ascending"
+                                        style="width: 256px;" aria-sort="descending">Product</td>
+                                    <td class="sorting" tabindex="0" aria-controls="productTable" rowspan="1"
+                                        colspan="1" aria-label="Pick: activate to sort column ascending"
+                                        style="width: 177px;">Pick</td>
+                                </tr>
+                            </thead>
+                            <tbody class="w-100" id="productList">
+                                <tr class="text-xs odd">
+                                    <td class="sorting_1"> <img class="w-10"
+                                            src="{% static 'uploads/1-1692093134-2.jpg' %}"> sd ($ 52)</td>
+                                    <td><a data-name="sd" data-price="52" data-id="2"
+                                            class="btn btn-outline-dark text-xxs px-2 py-1 addProduct  btn-sm m-0">Add</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="dataTables_paginate paging_simple_numbers" id="productTable_paginate"><a
+                                class="paginate_button previous disabled" aria-controls="productTable"
+                                aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1"
+                                id="productTable_previous">Previous</a><span><a class="paginate_button current"
+                                    aria-controls="productTable" role="link" aria-current="page" data-dt-idx="0"
+                                    tabindex="0">1</a></span><a class="paginate_button next disabled"
+                                aria-controls="productTable" aria-disabled="true" role="link" data-dt-idx="next"
+                                tabindex="-1" id="productTable_next">Next</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-lg-4 p-2">
+                <div class="shadow-sm h-100 bg-white rounded-3 p-3">
+                    <div id="customerTable_wrapper" class="dataTables_wrapper no-footer">
+                        <div id="customerTable_filter" class="dataTables_filter"><label>Search:<input type="search"
+                                    class="" placeholder="" aria-controls="customerTable"></label></div>
+                        <table class="table table-sm w-100 no-footer dataTable" id="customerTable"
+                            aria-describedby="customerTable_info" style="width: 505px;">
+                            <thead class="w-100">
+                                <tr class="text-xs text-bold">
+                                    <td class="sorting sorting_desc" tabindex="0" aria-controls="customerTable"
+                                        rowspan="1" colspan="1"
+                                        aria-label="Customer: activate to sort column ascending"
+                                        style="width: 274px;" aria-sort="descending">Customer</td>
+                                    <td class="sorting" tabindex="0" aria-controls="customerTable" rowspan="1"
+                                        colspan="1" aria-label="Pick: activate to sort column ascending"
+                                        style="width: 159px;">Pick</td>
+                                </tr>
+                            </thead>
+                            <tbody class="w-100" id="customerList">
+                                <tr class="text-xs odd">
+                                    <td class="sorting_1"><i class="bi bi-person"></i> IRS IT</td>
+                                    <td><a data-name="IRS IT" data-email="sdsd@sd.com" data-id="1"
+                                            class="btn btn-outline-dark addCustomer  text-xxs px-2 py-1  btn-sm m-0">Add</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="dataTables_paginate paging_simple_numbers" id="customerTable_paginate"><a
+                                class="paginate_button previous disabled" aria-controls="customerTable"
+                                aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1"
+                                id="customerTable_previous">Previous</a><span><a class="paginate_button current"
+                                    aria-controls="customerTable" role="link" aria-current="page" data-dt-idx="0"
+                                    tabindex="0">1</a></span><a class="paginate_button next disabled"
+                                aria-controls="customerTable" aria-disabled="true" role="link" data-dt-idx="next"
+                                tabindex="-1" id="customerTable_next">Next</a></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="modal animated zoomIn" id="create-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel">Add Product</h6>
+                </div>
+                <div class="modal-body">
+                    <form id="add-form">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 p-1">
+                                    <label class="form-label">Product ID *</label>
+                                    <input type="text" class="form-control" id="PId">
+                                    <label class="form-label mt-2">Product Name *</label>
+                                    <input type="text" class="form-control" id="PName">
+                                    <label class="form-label mt-2">Product Price *</label>
+                                    <input type="text" class="form-control" id="PPrice">
+                                    <label class="form-label mt-2">Product Qty *</label>
+                                    <input type="text" class="form-control" id="PQty">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-close" class="btn bg-gradient-primary" data-bs-dismiss="modal"
+                        aria-label="Close">Close</button>
+                    <button onclick="add()" id="save-btn" class="btn bg-gradient-success">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}

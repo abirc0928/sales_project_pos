@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Signup
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-10 center-screen">
+        <div class="card animated fadeIn w-100 p-3">
+          <div class="card-body">
+            <h4>Sign Up</h4>
+            <hr />
+            <form method="post">
+                {% csrf_token %}
+                <div class="container-fluid m-0 p-0">
+                  <div class="row m-0 p-0">
+                    <div class="col-md-4 p-2">
+                      <label>Email Address</label>
+                      <input id="email" name="email" placeholder="User Email" class="form-control" type="email" required />
+                    </div>
+                    <div class="col-md-4 p-2">
+                      <label>First Name</label>
+                      <input id="firstName" name="first_name" placeholder="First Name" class="form-control" type="text" required />
+                    </div>
+                    <div class="col-md-4 p-2">
+                      <label>Last Name</label>
+                      <input id="lastName" name="last_name" placeholder="Last Name" class="form-control" type="text" required />
+                    </div>
+                    <div class="col-md-4 p-2">
+                      <label>Mobile Number</label>
+                      <input id="mobile" name="mobile" placeholder="Mobile" class="form-control" type="text" required />
+                    </div>
+                    <div class="col-md-4 p-2">
+                      <label>Password</label>
+                      <input id="password" name="password1" placeholder="User Password" class="form-control" type="password" required />
+                    </div>
+                    <div class="col-md-4 p-2">
+                      <label>Confirm Password</label>
+                      <input id="c_password" name="password2" placeholder="Confirm Password" class="form-control" type="password" required />
+                    </div>
+                  </div>
+                  <div class="row m-0 p-0">
+                    <div class="col-md-4 p-2">
+                      <button type="submit" class="btn mt-3 w-100 bg-gradient-primary">Complete</button>
+                    </div>
+                  </div>
+                </div>
+              </form>              
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

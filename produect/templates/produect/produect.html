@@ -1,0 +1,306 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% block title %}
+  Product
+{% endblock %}
+{% block content %}
+  <div id="contentRef" class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-lg-12">
+          <div class="card px-5 py-5">
+            <div class="row justify-content-between">
+              <div class="align-items-center col">
+                <h4>Product</h4>
+              </div>
+              <div class="align-items-center col" id="message"></div>
+              <div class="align-items-center col">
+                <button data-bs-toggle="modal" data-bs-target="#create-modal" class="float-end btn m-0 bg-gradient-primary">Create</button>
+              </div>
+            </div>
+            <hr class="bg-dark" />
+            <table class="table" id="tableData">
+              <thead>
+                <tr class="bg-light">
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Unit</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="tableList">
+                {% for product in products %}
+                  <tr class="odd">
+                    <td class="sorting_1">
+                      <img class="w-15 h-auto" alt="" src="{{ product.image.url }}" />
+                    </td>
+                    <td>{{ product.name|capfirst }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.unit }}</td>
+                    <td>
+                      <button data-bs-toggle="modal" data-bs-target="#update-modal" type="button" class="btn editBtn btn-sm btn-outline-success" onclick="SetEditId('{{ product.id }}')">Edit</button>
+                      <button data-bs-toggle="modal" data-bs-target="#delete-modal" type="button" class="btn deleteBtn btn-sm btn-outline-danger" onclick="SetDeleteId('{{ product.id }}')">Delete</button>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal animated zoomIn" id="delete-modal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <h3 class="mt-3 text-warning">Delete !</h3>
+            <p class="mb-3">Once delete, you can't get it back.</p>
+            <input class="d-none" id="deleteID" />
+            <input class="d-none" id="deleteFilePath" />
+          </div>
+          <div class="modal-footer justify-content-end">
+            <div>
+              <button type="button" id="delete-modal-close" class="btn bg-gradient-success mx-2" data-bs-dismiss="modal">Cancel</button>
+              <button onclick="itemDelete()" type="button" id="confirmDelete" class="btn bg-gradient-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal animated zoomIn" id="create-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create Product</h5>
+          </div>
+          <div class="modal-body">
+            <form id="save-form">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 p-1">
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-control form-select" id="productCategory">
+                      <option value="">Select Category</option>
+                      {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                      {% endfor %}
+                    </select>
+
+                    <label class="form-label mt-2">Name</label>
+                    <input type="text" name="name" class="form-control" id="productName" />
+
+                    <label class="form-label mt-2">Price</label>
+                    <input type="text" name="price" class="form-control" id="productPrice" />
+
+                    <label class="form-label mt-2">Unit</label>
+                    <input type="text" name="unit" class="form-control" id="productUnit" />
+
+                    <br />
+                    <img class="w-15" id="newImg" src="{% static 'images/default.jpg' %}" />
+                    <br />
+
+                    <label class="form-label">Image</label>
+                    <input oninput="newImg.src=window.URL.createObjectURL(this.files[0])" type="file" name="image" class="form-control" id="productImg" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="modal-close" class="btn bg-gradient-primary mx-2" data-bs-dismiss="modal" aria-label="Close">Close</button>
+            <button onclick="Save()" id="save-btn" class="btn bg-gradient-success">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal animated zoomIn" id="update-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+          </div>
+          <div class="modal-body">
+            <form id="update-form">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 p-1">
+                    <label class="form-label">Category</label>
+                    <select type="text" class="form-control form-select" id="productCategoryUpdate">
+                      <option value="">Select Category</option>
+                      {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                      {% endfor %}
+                    </select>
+
+                    <label class="form-label mt-2">Name</label>
+                    <input type="text" class="form-control" id="productNameUpdate" />
+
+                    <label class="form-label mt-2">Price</label>
+                    <input type="text" class="form-control" id="productPriceUpdate" />
+
+                    <label class="form-label mt-2">Unit</label>
+                    <input type="text" class="form-control" id="productUnitUpdate" />
+                    <br />
+                    <img class="w-15" id="oldImg" src="{% static 'images/default.jpg' %}" />
+                    <br />
+                    <label class="form-label mt-2">Image</label>
+                    <input oninput="oldImg.src=window.URL.createObjectURL(this.files[0])" type="file" class="form-control" id="productImgUpdate" />
+
+                    <input type="text" class="d-none" id="updateID" />
+                    <input type="text" class="d-none" id="filePath" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button id="update-modal-close" class="btn bg-gradient-primary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+            <button onclick="update()" id="update-btn" class="btn bg-gradient-success">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function Save() {
+      const form = document.getElementById('save-form')
+      const formData = new FormData(form)
+    
+      fetch("{% url 'add_product' %}", {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: formData
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            localStorage.setItem('productAdded', 'true')
+            location.reload()
+          } else {
+            alert('Failed to add product: ' + data.error)
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+    }
+  </script>
+  <script>
+    let deleteId = ''
+    function SetDeleteId(id) {
+      deleteId = id
+    }
+    
+    function itemDelete() {
+      if (!deleteId) {
+        alert('No category ID set for deletion.')
+        return
+      }
+      const baseDeleteUrl = "{% url 'delete_product' '0' %}".slice(0, -1)
+      const url = `${baseDeleteUrl}${deleteId}/`
+      localStorage.setItem('productDeleted', 'true')
+      window.location.href = url
+    }
+  </script>
+  <script>
+    let editId = ''
+    let url = ''
+    function SetEditId(id) {
+      editId = id
+      console.log(editId)
+      // Fetch product data to pre-fill the form
+      const baseDeleteUrl = "{% url 'edit_product' '0' %}".slice(0, -1)
+      const url = `${baseDeleteUrl}${editId}/`
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          // Pre-fill form fields with product data
+          document.getElementById('productCategoryUpdate').value = data.category
+          document.getElementById('productNameUpdate').value = data.name
+          document.getElementById('productPriceUpdate').value = data.price
+          document.getElementById('productUnitUpdate').value = data.unit
+          document.getElementById('oldImg').src = data.image_url
+          document.getElementById('filePath').value = data.image_path
+        })
+        .catch((error) => {
+          console.error('Error fetching product data:', error)
+        })
+    }
+    
+    function update() {
+      let category = document.getElementById('productCategoryUpdate').value
+      let name = document.getElementById('productNameUpdate').value
+      let price = document.getElementById('productPriceUpdate').value
+      let unit = document.getElementById('productUnitUpdate').value
+      let image = document.getElementById('productImgUpdate').files[0]
+    
+      let formData = new FormData()
+      formData.append('category', category)
+      formData.append('name', name)
+      formData.append('price', price)
+      formData.append('unit', unit)
+      if (image) {
+        formData.append('image', image)
+      }
+    
+      const baseDeleteUrl = "{% url 'edit_product' '0' %}".slice(0, -1)
+      const url = `${baseDeleteUrl}${editId}/`
+      console.log(url)
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+        }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            localStorage.setItem('productUpdate', 'true')
+            location.reload()
+          } else {
+            alert('Failed to update product.')
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating product:', error)
+        })
+    }
+  </script>
+  <script>
+    window.onload = function () {
+      var create_success = document.getElementById('message')
+    
+      if (localStorage.getItem('productAdded') === 'true') {
+        create_success.innerHTML = '<h5 class="bg-success ps-5 text-white">Product added successfully!</h5>'
+    
+        setTimeout(() => {
+          create_success.innerHTML = ''
+          localStorage.removeItem('productAdded')
+        }, 5000)
+      }
+      if (localStorage.getItem('productDeleted') === 'true') {
+        create_success.innerHTML = '<h5 class="bg-danger ps-5 text-white">Product Deleted successfully!</h5>'
+        setTimeout(() => {
+          create_success.innerHTML = ''
+          localStorage.removeItem('productDeleted')
+        }, 5000)
+      }
+      if (localStorage.getItem('productUpdate') === 'true') {
+        create_success.innerHTML = '<h5 class="bg-info ps-5 text-white">Product Updated successfully!</h5>'
+        setTimeout(() => {
+          create_success.innerHTML = ''
+          localStorage.removeItem('productUpdate')
+        }, 5000)
+      }
+    }
+  </script>
+{% endblock %}

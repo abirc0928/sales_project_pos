@@ -1,13 +1,13 @@
 from django.urls import path
-from .views import login_view,home_view, logout_view, otp_verify_view, update_profile_view
+from .views import  logout_view,userLogin, userOTP
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('login/', login_view, name='login'),
-    path('home/', home_view, name='home'),
+   
+    path('userLogin/', userLogin, name='userLogin'),
+    path('sendOtp/', userOTP, name='userOTP'),
     path('logout/', logout_view, name='logout'),
-    path('otp/', otp_verify_view, name='otp-verify'),
-    path('profile_update/', update_profile_view, name='profile_update'),
+    # path('profile_update/', update_profile_view, name='profile_update'),
 
      path('password-reset/',
          auth_views.PasswordResetView.as_view(
